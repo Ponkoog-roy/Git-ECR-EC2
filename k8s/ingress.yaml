@@ -2,15 +2,26 @@ apiVersion: networking.k8s.io/v1
 kind: Ingress
 metadata:
   name: login-ingress
+  annotations:
+    kubernetes.io/ingress.class: traefik
 spec:
   rules:
-  - host: login.local
-    http:
-      paths:
-      - path: /
-        pathType: Prefix
-        backend:
-          service:
-            name: login-frontend-service
-            port:
-              number: 80
+    - host: login.local
+      http:
+        paths:
+          - path: /
+            pathType: Prefix
+            backend:
+              service:
+                name: login-frontend-service
+                port:
+                  number: 80
+    - http:  # catch-all rule for IP access
+        paths:
+          - path: /
+            pathType: Prefix
+            backend:
+              service:
+                name: login-frontend-service
+                port:
+                  number: 80
